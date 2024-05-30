@@ -11,23 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        
-        Schema::create('quota_idn_brances', function (Blueprint $table) {
+        Schema::create('programs', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name');
+            
+        });
+        Schema::create('idn_brances', function (Blueprint $table) {
             $table->increments('id');
             $table->string('branch_name');
-            $table->integer('tkj_quota');
-            $table->integer('rpl_quota');
-            $table->integer('dkv_quota');
-            $table->integer('smp_quota');
         });
+        Schema::create('idn_branch_programs', function (Blueprint $table) {
+            $table->increments('id');
+            $table->foreignId('idn_brances_id')->constrained();
+            $table->foreignId('programs_id')->constrained();
+            $table->integer('quota');
+        });
+        
         Schema::create('registered_students', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('email')->unique;
+            $table->string('email');
             $table->string('password');
             $table->string('santri_name');
             $table->boolean('gender');
-            $table->foreignId('quota_idn_brances_id')->constrained();
-            $table->string('program_idn');
+            $table->foreignId('idn_branch_programs_id')->constrained();
             $table->string('proof_of_transaction');
         });
         
